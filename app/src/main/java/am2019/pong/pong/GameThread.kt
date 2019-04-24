@@ -6,7 +6,7 @@ import android.view.SurfaceHolder
 class GameThread(private val surfaceHolder: SurfaceHolder,
                  private val gameView: GameView) : Thread() {
 
-    private val targetFPS = 50
+    private val targetFPS = 60
     private var running: Boolean = false
     private var canvas: Canvas? = null
 

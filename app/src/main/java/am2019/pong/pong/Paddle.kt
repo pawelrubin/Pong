@@ -4,10 +4,15 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 
-class Paddle(private val side : Side, private val paddleX : Float, private var paddleY: Float) {
+class Paddle(private val side : Side, x: Float, y: Float) {
 
-    private val height : Float = 500f
-    private val width : Float = 50f
+    var paddleX = x
+        private set
+    var paddleY = y
+        private set
+
+    val height : Float = 500f
+    val width : Float = 50f
 
     private fun updatePosition(newPos: Float) {
         paddleY = newPos
@@ -31,7 +36,7 @@ class Paddle(private val side : Side, private val paddleX : Float, private var p
     }
 
     fun movePaddle(newY: Float) {
-        updatePosition(newY)
+        updatePosition(newY - height/2)
     }
 }
 

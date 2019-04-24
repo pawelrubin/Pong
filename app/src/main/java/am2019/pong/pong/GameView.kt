@@ -1,19 +1,30 @@
 package am2019.pong.pong
 
+import am2019.pong.R
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.media.MediaPlayer
+import android.os.Parcelable
+import android.text.TextPaint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.*
+
 
 class GameView(context: Context, attrs: AttributeSet)
     : SurfaceView(context, attrs), SurfaceHolder.Callback {
 
     private val thread : GameThread
+    private val scoreSound = MediaPlayer.create(context, R.raw.score)
 
     private lateinit var paddleA : Paddle
     private lateinit var paddleB : Paddle
     private lateinit var ball : Ball
+    lateinit var game: Game
+        private set
 
     init {
         holder.addCallback(this)
@@ -34,6 +45,9 @@ class GameView(context: Context, attrs: AttributeSet)
         ball = Ball(width/2f, height/2f)
         ball.setUpGameView(this)
 
+        // Set up the game.
+        game = Game(paddleA, paddleB, ball)
+
         thread.setRunning(true)
         thread.start()
     }
@@ -41,7 +55,13 @@ class GameView(context: Context, attrs: AttributeSet)
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
     }
 
+
     fun update() {
+        game.checkBounce()
+        if (game.referee()) {
+            scoreSound.start()
+            ball.resetBall()
+        }
         ball.move()
     }
 
@@ -51,6 +71,7 @@ class GameView(context: Context, attrs: AttributeSet)
             paddleA.draw(it)
             paddleB.draw(it)
             ball.draw(it)
+            updateScore(it)
         }
     }
 
@@ -64,5 +85,18 @@ class GameView(context: Context, attrs: AttributeSet)
             }
         }
         return true
+    }
+
+    fun updateScore(canvas: Canvas?) {
+        canvas?.also {
+            val textPaint = TextPaint()
+            textPaint.color = Color.WHITE
+            textPaint.textSize = 500f
+            textPaint.alpha = 50
+            textPaint.textAlign = Paint.Align.CENTER
+            val xPos = canvas.width / 2f
+            val yPos = (canvas.height / 2f - (textPaint.descent() + textPaint.ascent()) / 2f)
+            it.drawText("${game.pointsA} : ${game.pointsB}", xPos, yPos, textPaint)
+        }
     }
 }
