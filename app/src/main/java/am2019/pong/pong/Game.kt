@@ -15,7 +15,7 @@ class Game (private val paddleA: Paddle, private val paddleB: Paddle, private va
 
         if (((ball.ballX in (left .. (left - ball.dx))) && (ball.ballY + ball.size/2 in (paddleA.paddleY .. paddleA.paddleY+paddleA.height))) ||
             (ball.ballX + ball.size in (right-ball.dx .. right)) && (ball.ballY + ball.size/2 in (paddleB.paddleY .. paddleB.paddleY+paddleA.height))) {
-            ball.playBounceSound()
+            ball.playPaddleBounceSound()
             ball.changeHorizontalDirection()
             ball.move()
         }
@@ -23,12 +23,12 @@ class Game (private val paddleA: Paddle, private val paddleB: Paddle, private va
 
     fun referee() : Boolean {
         return when {
-            ball.ballX < paddleA.paddleX + paddleA.width -> {
+            ball.ballX < paddleA.paddleX -> {
                 pointsB++
                 Log.d("DEBUG", "point for B")
                 true
             }
-            ball.ballX + ball.size > paddleB.paddleX - paddleB.width-> {
+            ball.ballX + ball.size > paddleB.paddleX -> {
                 pointsA++
                 Log.d("DEBUG", "point for A")
                 true

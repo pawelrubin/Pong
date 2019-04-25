@@ -12,16 +12,17 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import java.util.*
+import kotlin.concurrent.schedule
 
 
-class GameView(context: Context, attrs: AttributeSet)
-    : SurfaceView(context, attrs), SurfaceHolder.Callback {
+class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, attrs), SurfaceHolder.Callback {
 
-    private val thread : GameThread
+    private val thread: GameThread
 
-    private lateinit var paddleA : Paddle
-    private lateinit var paddleB : Paddle
-    private lateinit var ball : Ball
+    private lateinit var paddleA: Paddle
+    private lateinit var paddleB: Paddle
+    private lateinit var ball: Ball
     private lateinit var game: Game
 
     init {
@@ -36,11 +37,11 @@ class GameView(context: Context, attrs: AttributeSet)
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
         // Set up the paddles.
-        paddleA = Paddle(Side.A,0f,height/2f)
-        paddleB = Paddle(Side.B, width.toFloat(),height/2f)
+        paddleA = Paddle(Side.A, 0f, height / 2f)
+        paddleB = Paddle(Side.B, width.toFloat(), height / 2f)
 
         // Set up the ball.
-        ball = Ball(width/2f, height/2f)
+        ball = Ball(width / 2f, height / 2f)
         ball.setUpGameView(this)
 
         // Set up the game.
@@ -53,19 +54,9 @@ class GameView(context: Context, attrs: AttributeSet)
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
     }
 
-    fun playBounceSound() {
+    fun playSound(resId: Int) {
         Thread {
-            val player =  MediaPlayer.create(context, R.raw.hit)
-            player.start()
-            player.setOnCompletionListener {
-                it.release()
-            }
-        }.start()
-    }
-
-    private fun playScoreSound() {
-        Thread {
-            val player =  MediaPlayer.create(context, R.raw.score_sound2)
+            val player = MediaPlayer.create(context, resId)
             player.start()
             player.setOnCompletionListener {
                 it.release()
@@ -76,8 +67,11 @@ class GameView(context: Context, attrs: AttributeSet)
     fun update() {
         game.checkBounce()
         if (game.referee()) {
-            playScoreSound()
-            ball.resetBall()
+            playSound(R.raw.score_sound2)
+            ball.kill()
+            Timer().schedule(500) {
+                ball.resetBall()
+            }
         }
         ball.move()
     }
@@ -95,7 +89,7 @@ class GameView(context: Context, attrs: AttributeSet)
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         for (i in 0 until event.pointerCount) {
-            if (event.getX(i) < width/2) {
+            if (event.getX(i) < width / 2) {
                 paddleA.movePaddle(event.getY(i))
             } else {
                 paddleB.movePaddle(event.getY(i))

@@ -20,6 +20,8 @@ class Ball(private var initX : Float, private var initY : Float) {
     private lateinit var gameView : GameView
 
     init {
+        initX -= size/2
+        initY -= size/2
         resetBall()
     }
 
@@ -57,25 +59,35 @@ class Ball(private var initX : Float, private var initY : Float) {
 
     private fun changeDirectionOnBounds(left: Float, right: Float) {
         if (ballX <= left || ballX + size >= right) {
-            playBounceSound()
             changeHorizontalDirection()
             funnyBounce()
         }
 
         if (ballY <= 0f || ballY + size >= gameView.height.toFloat()) {
-            playBounceSound()
+            playWallBounceSound()
             changeVerticalDirection()
             funnyBounce()
         }
     }
 
-    fun playBounceSound() {
-        gameView.playBounceSound()
+    private fun playWallBounceSound() {
+        gameView.playSound(R.raw.hit)
+    }
+
+    fun playPaddleBounceSound() {
+        gameView.playSound(R.raw.hit2)
     }
 
     fun move() {
         ballX += dx
         ballY += dy
         changeDirectionOnBounds(0f, gameView.width.toFloat())
+    }
+
+    fun kill() {
+        dx = 0f
+        dy = 0f
+        ballX = initX
+        ballY = initY
     }
 }
