@@ -1,9 +1,10 @@
 package am2019.pong.pong
 
+import am2019.pong.R
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
-import android.util.Log
+import android.support.v4.content.ContextCompat
 import kotlin.random.Random
 
 class Ball(private var initX : Float, private var initY : Float) {
@@ -12,10 +13,10 @@ class Ball(private var initX : Float, private var initY : Float) {
     var ballY = initY
         private set
     val size = 50f
+
     var dx = 15f
         private set
-    var dy = 15f
-        private set
+    private var dy = 15f
     private lateinit var gameView : GameView
 
     init {
@@ -23,22 +24,18 @@ class Ball(private var initX : Float, private var initY : Float) {
     }
 
     fun draw(canvas: Canvas) {
-        val red = Paint()
-        red.setARGB(255,255,255,255)
-        canvas.drawOval(RectF(ballX, ballY,ballX + size,ballY + size), red)
+        val paint = Paint()
+        paint.color = ContextCompat.getColor(gameView.context, R.color.colorAccent)
+
+        canvas.drawOval(RectF(ballX, ballY,ballX + size,ballY + size), paint)
     }
 
     fun resetBall() {
         ballX = initX
         ballY = initY
-        dx = 15 + 5*Random.nextFloat() * Math.pow((-1).toDouble(), Random.nextInt(1).toDouble()).toFloat()
-        dy = 15 + 5*Random.nextFloat() * Math.pow((-1).toDouble(), Random.nextInt(1).toDouble()).toFloat()
+        dx = (15 + 5*Random.nextFloat()) * Math.pow((-1).toDouble(), Random.nextInt(3).toDouble()).toFloat()
+        dy = (15 + 5*Random.nextFloat()) * Math.pow((-1).toDouble(), Random.nextInt(3).toDouble()).toFloat()
         changeHorizontalDirection()
-    }
-
-    fun freeze() {
-        dx = 0f
-        dy = 0f
     }
 
     fun setUpGameView(gameView: GameView) {
@@ -49,14 +46,31 @@ class Ball(private var initX : Float, private var initY : Float) {
         dx = -dx
     }
 
-    fun changeDirectionOnBounds(left: Float, right: Float) {
+    private fun changeVerticalDirection() {
+        dy = -dy
+    }
+
+    private fun funnyBounce() {
+        dy *= Random.nextDouble(0.9, 1.2).toFloat()
+        dx *= Random.nextDouble(0.9, 1.2).toFloat()
+    }
+
+    private fun changeDirectionOnBounds(left: Float, right: Float) {
         if (ballX <= left || ballX + size >= right) {
-            dx = -dx
+            playBounceSound()
+            changeHorizontalDirection()
+            funnyBounce()
         }
 
         if (ballY <= 0f || ballY + size >= gameView.height.toFloat()) {
-            dy = -dy
+            playBounceSound()
+            changeVerticalDirection()
+            funnyBounce()
         }
+    }
+
+    fun playBounceSound() {
+        gameView.playBounceSound()
     }
 
     fun move() {

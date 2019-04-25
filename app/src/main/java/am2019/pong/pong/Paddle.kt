@@ -14,6 +14,10 @@ class Paddle(private val side : Side, x: Float, y: Float) {
     val height : Float = 500f
     val width : Float = 50f
 
+    init {
+        paddleY -= height/2f
+    }
+
     private fun updatePosition(newPos: Float) {
         paddleY = newPos
     }

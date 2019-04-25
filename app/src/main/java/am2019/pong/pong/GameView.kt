@@ -7,24 +7,22 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.media.MediaPlayer
-import android.os.Parcelable
 import android.text.TextPaint
 import android.util.AttributeSet
-import android.util.Log
-import android.view.*
+import android.view.MotionEvent
+import android.view.SurfaceHolder
+import android.view.SurfaceView
 
 
 class GameView(context: Context, attrs: AttributeSet)
     : SurfaceView(context, attrs), SurfaceHolder.Callback {
 
     private val thread : GameThread
-    private val scoreSound = MediaPlayer.create(context, R.raw.score)
 
     private lateinit var paddleA : Paddle
     private lateinit var paddleB : Paddle
     private lateinit var ball : Ball
-    lateinit var game: Game
-        private set
+    private lateinit var game: Game
 
     init {
         holder.addCallback(this)
@@ -55,11 +53,30 @@ class GameView(context: Context, attrs: AttributeSet)
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
     }
 
+    fun playBounceSound() {
+        Thread {
+            val player =  MediaPlayer.create(context, R.raw.hit)
+            player.start()
+            player.setOnCompletionListener {
+                it.release()
+            }
+        }.start()
+    }
+
+    private fun playScoreSound() {
+        Thread {
+            val player =  MediaPlayer.create(context, R.raw.score_sound2)
+            player.start()
+            player.setOnCompletionListener {
+                it.release()
+            }
+        }.start()
+    }
 
     fun update() {
         game.checkBounce()
         if (game.referee()) {
-            scoreSound.start()
+            playScoreSound()
             ball.resetBall()
         }
         ball.move()
@@ -87,7 +104,7 @@ class GameView(context: Context, attrs: AttributeSet)
         return true
     }
 
-    fun updateScore(canvas: Canvas?) {
+    private fun updateScore(canvas: Canvas?) {
         canvas?.also {
             val textPaint = TextPaint()
             textPaint.color = Color.WHITE

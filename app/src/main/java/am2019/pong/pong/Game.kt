@@ -1,8 +1,6 @@
 package am2019.pong.pong
 
-import android.media.MediaPlayer
 import android.util.Log
-import kotlin.math.abs
 
 class Game (private val paddleA: Paddle, private val paddleB: Paddle, private val ball: Ball) {
     var pointsA = 0
@@ -17,6 +15,7 @@ class Game (private val paddleA: Paddle, private val paddleB: Paddle, private va
 
         if (((ball.ballX in (left .. (left - ball.dx))) && (ball.ballY + ball.size/2 in (paddleA.paddleY .. paddleA.paddleY+paddleA.height))) ||
             (ball.ballX + ball.size in (right-ball.dx .. right)) && (ball.ballY + ball.size/2 in (paddleB.paddleY .. paddleB.paddleY+paddleA.height))) {
+            ball.playBounceSound()
             ball.changeHorizontalDirection()
             ball.move()
         }
