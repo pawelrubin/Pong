@@ -16,7 +16,7 @@ class Game (private val paddleA: Paddle, private val paddleB: Paddle, private va
         if (((ball.ballX in (left .. (left - ball.dx))) && (ball.ballY + ball.size/2 in (paddleA.paddleY .. paddleA.paddleY+paddleA.height))) ||
             (ball.ballX + ball.size in (right-ball.dx .. right)) && (ball.ballY + ball.size/2 in (paddleB.paddleY .. paddleB.paddleY+paddleA.height))) {
             ball.playPaddleBounceSound()
-            ball.changeHorizontalDirection()
+            ball.flipDirection(Ball.SpeedComponent.X)
             ball.move()
         }
     }
@@ -25,12 +25,10 @@ class Game (private val paddleA: Paddle, private val paddleB: Paddle, private va
         return when {
             ball.ballX < paddleA.paddleX -> {
                 pointsB++
-                Log.d("DEBUG", "point for B")
                 true
             }
             ball.ballX + ball.size > paddleB.paddleX -> {
                 pointsA++
-                Log.d("DEBUG", "point for A")
                 true
             }
             else -> false

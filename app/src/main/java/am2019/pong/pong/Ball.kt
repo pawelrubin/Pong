@@ -37,19 +37,18 @@ class Ball(private var initX : Float, private var initY : Float) {
         ballY = initY
         dx = (15 + 5*Random.nextFloat()) * Math.pow((-1).toDouble(), Random.nextInt(3).toDouble()).toFloat()
         dy = (15 + 5*Random.nextFloat()) * Math.pow((-1).toDouble(), Random.nextInt(3).toDouble()).toFloat()
-        changeHorizontalDirection()
+        flipDirection(SpeedComponent.X)
     }
 
     fun setUpGameView(gameView: GameView) {
         this.gameView = gameView
     }
 
-    fun changeHorizontalDirection() {
-        dx = -dx
-    }
-
-    private fun changeVerticalDirection() {
-        dy = -dy
+    fun flipDirection(component: SpeedComponent) {
+        when (component) {
+            SpeedComponent.X -> dx *= -1
+            SpeedComponent.Y -> dy *= -1
+        }
     }
 
     private fun funnyBounce() {
@@ -57,15 +56,10 @@ class Ball(private var initX : Float, private var initY : Float) {
         dx *= Random.nextDouble(0.9, 1.2).toFloat()
     }
 
-    private fun changeDirectionOnBounds(left: Float, right: Float) {
-        if (ballX <= left || ballX + size >= right) {
-            changeHorizontalDirection()
-            funnyBounce()
-        }
-
+    private fun checkWallBounce() {
         if (ballY <= 0f || ballY + size >= gameView.height.toFloat()) {
             playWallBounceSound()
-            changeVerticalDirection()
+            flipDirection(SpeedComponent.Y)
             funnyBounce()
         }
     }
@@ -81,7 +75,7 @@ class Ball(private var initX : Float, private var initY : Float) {
     fun move() {
         ballX += dx
         ballY += dy
-        changeDirectionOnBounds(0f, gameView.width.toFloat())
+        checkWallBounce()
     }
 
     fun kill() {
@@ -89,5 +83,10 @@ class Ball(private var initX : Float, private var initY : Float) {
         dy = 0f
         ballX = initX
         ballY = initY
+    }
+
+    enum class SpeedComponent {
+        X,
+        Y
     }
 }
