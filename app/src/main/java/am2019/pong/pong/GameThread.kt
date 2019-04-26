@@ -6,11 +6,7 @@ class GameThread(private val surfaceHolder: SurfaceHolder,
                  private val gameView: GameView) : Thread() {
 
     private val targetFPS = 60
-    private var running: Boolean = false
-
-    fun setRunning(isRunning: Boolean) {
-        this.running = isRunning
-    }
+    var running: Boolean = false
 
     override fun run() {
         var startTime : Long
@@ -19,7 +15,7 @@ class GameThread(private val surfaceHolder: SurfaceHolder,
         while(running) {
             startTime = System.nanoTime()
 
-            surfaceHolder.lockCanvas().also {
+            surfaceHolder.lockCanvas()?.also {
                 synchronized(surfaceHolder) {
                     gameView.update()
                     gameView.draw(it)

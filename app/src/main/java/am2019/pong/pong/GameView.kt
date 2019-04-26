@@ -31,7 +31,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder?) {
-        thread.setRunning(false)
+        thread.running = false
         thread.join()
     }
 
@@ -47,7 +47,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         // Set up the game.
         game = Game(paddleA, paddleB, ball)
 
-        thread.setRunning(true)
+        thread.running = true
         thread.start()
     }
 

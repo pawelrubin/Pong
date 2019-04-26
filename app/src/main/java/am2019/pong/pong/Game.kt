@@ -1,7 +1,5 @@
 package am2019.pong.pong
 
-import android.util.Log
-
 class Game (private val paddleA: Paddle, private val paddleB: Paddle, private val ball: Ball) {
     var pointsA = 0
         private set
