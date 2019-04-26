@@ -52,8 +52,8 @@ class Ball(private var initX : Float, private var initY : Float) {
     }
 
     private fun funnyBounce() {
-        dy *= Random.nextDouble(0.9, 1.2).toFloat()
-        dx *= Random.nextDouble(0.9, 1.2).toFloat()
+        dy *= Random.nextDouble(1.0, 1.05).toFloat()
+        dx *= Random.nextDouble(1.0, 1.05).toFloat()
     }
 
     private fun checkWallBounce() {

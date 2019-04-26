@@ -3,6 +3,7 @@ package am2019.pong.pong
 import am2019.pong.R
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -24,6 +25,8 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
     private lateinit var paddleB: Paddle
     private lateinit var ball: Ball
     private lateinit var game: Game
+    private val sharedPreferences : SharedPreferences =
+        context.getSharedPreferences("best_score", Context.MODE_PRIVATE)
 
     init {
         holder.addCallback(this)
@@ -45,7 +48,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         ball.setUpGameView(this)
 
         // Set up the game.
-        game = Game(paddleA, paddleB, ball)
+        game = Game(paddleA, paddleB, ball, sharedPreferences.getInt("best_score", 0))
 
         thread.running = true
         thread.start()
@@ -68,6 +71,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         game.checkBounce()
         if (game.referee()) {
             playSound(R.raw.score_sound2)
+            sharedPreferences.edit().putInt("best_score", game.bestScore).apply()
             ball.kill()
             Timer().schedule(500) {
                 ball.resetBall()
@@ -99,7 +103,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
     }
 
     private fun updateScore(canvas: Canvas?) {
-        canvas?.also {
+        canvas?.also { it ->
             val textPaint = TextPaint()
             textPaint.color = Color.WHITE
             textPaint.textSize = 500f
@@ -107,7 +111,9 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
             textPaint.textAlign = Paint.Align.CENTER
             val xPos = canvas.width / 2f
             val yPos = (canvas.height / 2f - (textPaint.descent() + textPaint.ascent()) / 2f)
-            it.drawText("${game.pointsA} : ${game.pointsB}", xPos, yPos, textPaint)
+            it.drawText("${game.points}", xPos, yPos, textPaint)
+            textPaint.textSize = 100f
+            it.drawText("${game.bestScore}", xPos, 100f, textPaint)
         }
     }
 }
