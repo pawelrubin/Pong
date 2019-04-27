@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
 
     fun settingsActivity(view: View) {
         Intent(this, SettingsActivity::class.java).also {
+            it.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
             startActivity(it)
         }
     }

@@ -20,6 +20,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
+
         ArrayAdapter.createFromResource(this, R.array.modeTypes, R.layout.custom_spinner).also {
                 adapter ->
             // Specify the layout to use when the list of choices appears

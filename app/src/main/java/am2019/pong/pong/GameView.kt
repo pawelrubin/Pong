@@ -28,7 +28,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
     private lateinit var game: GameAbstract
     private var settings: Settings = (context as GameActivity).settings
     private val sharedPreferences : SharedPreferences =
-        context.getSharedPreferences("best_score", Context.MODE_PRIVATE)
+        context.getSharedPreferences(settings.difficulty.toString(), Context.MODE_PRIVATE)
 
     init {
         holder.addCallback(this)

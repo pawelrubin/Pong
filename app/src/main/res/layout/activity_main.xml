@@ -19,20 +19,22 @@
         <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
                         android:orientation="horizontal">
             <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="P"
-                    android:textSize="100sp"
-                    android:textColor="@color/colorAccent"/>
+                    android:text=" p "
+                    android:textSize="57sp"
+                    android:textColor="@color/colorAccent" android:fontFamily="@font/bangers"/>
             <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
                        app:srcCompat="@mipmap/pong"
-                        android:layout_marginTop="60dp"/>
+                        android:layout_marginTop="35dp"
+                        android:layout_marginStart="-5dp"
+                        android:layout_marginEnd="-2dp"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ng"
-                    android:textSize="100sp"
-                    android:textColor="@color/colorAccent"/>
+                    android:text="ng "
+                    android:textSize="57sp"
+                    android:textColor="@color/colorAccent" android:fontFamily="@font/bangers"/>
 
         </LinearLayout>
 
@@ -44,8 +46,10 @@
                 android:id="@+id/playButton"
                 android:onClick="settingsActivity"
                 android:background="@drawable/custom_button"
-                android:textSize="20sp"
-                />
+                android:textSize="25sp"
+                android:fontFamily="@font/bungee"
+                android:includeFontPadding="false"
+        />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

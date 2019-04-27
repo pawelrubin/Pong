@@ -11,11 +11,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity
-                android:name=".activity.SettingsActivity"
-                android:screenOrientation="landscape"
-                android:theme="@style/Full">
-        </activity>
+
         <activity
                 android:name=".activity.MainActivity"
                 android:screenOrientation="landscape"
@@ -27,15 +23,15 @@
             </intent-filter>
         </activity>
         <activity
+                android:name=".activity.SettingsActivity"
+                android:screenOrientation="landscape"
+                android:theme="@style/Full">
+        </activity>
+        <activity
                 android:name=".activity.GameActivity"
                 android:label="@string/app_name"
                 android:screenOrientation="landscape"
                 android:theme="@style/Full">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
     </application>
 
