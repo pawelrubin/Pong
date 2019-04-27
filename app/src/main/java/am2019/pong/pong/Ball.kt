@@ -7,21 +7,35 @@ import android.graphics.RectF
 import android.support.v4.content.ContextCompat
 import kotlin.random.Random
 
-class Ball(private var initX : Float, private var initY : Float) {
+class Ball(var initX : Float, private var initY : Float, difficulty: Difficulty) {
     var ballX = initX
         private set
     var ballY = initY
         private set
     val size = 50f
 
+    private var defdx = 15f
+    private var defdy = 15f
+
     var dx = 15f
         private set
     private var dy = 15f
+
     private lateinit var gameView : GameView
 
     init {
         initX -= size/2
         initY -= size/2
+
+        dx = when (difficulty) {
+            Difficulty.EASY -> 15f
+            Difficulty.MEDIUM -> 20f
+            Difficulty.HARD -> 30f
+        }
+        dy = dx
+        defdx = dx
+        defdy = dy
+
         resetBall()
     }
 
@@ -35,8 +49,8 @@ class Ball(private var initX : Float, private var initY : Float) {
     fun resetBall() {
         ballX = initX
         ballY = initY
-        dx = (15 + 5*Random.nextFloat()) * Math.pow((-1).toDouble(), Random.nextInt(3).toDouble()).toFloat()
-        dy = (15 + 5*Random.nextFloat()) * Math.pow((-1).toDouble(), Random.nextInt(3).toDouble()).toFloat()
+        dx = (defdx + 5*Random.nextFloat()) * randomNegativity()
+        dy = (defdy + 5*Random.nextFloat()) * randomNegativity()
         flipDirection(SpeedComponent.X)
     }
 
@@ -83,6 +97,10 @@ class Ball(private var initX : Float, private var initY : Float) {
         dy = 0f
         ballX = initX
         ballY = initY
+    }
+
+    private fun randomNegativity() : Int {
+        return Math.pow((-1).toDouble(), Random.nextInt(2).toDouble()).toInt()
     }
 
     enum class SpeedComponent {

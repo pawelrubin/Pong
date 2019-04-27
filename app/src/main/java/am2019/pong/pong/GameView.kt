@@ -1,6 +1,7 @@
 package am2019.pong.pong
 
 import am2019.pong.R
+import am2019.pong.activity.GameActivity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
@@ -21,10 +22,11 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
 
     private val thread: GameThread
 
-    private lateinit var paddleA: Paddle
-    private lateinit var paddleB: Paddle
+    private lateinit var paddleA: PaddleAbstract
+    private lateinit var paddleB: PaddleAbstract
     private lateinit var ball: Ball
-    private lateinit var game: Game
+    private lateinit var game: GameAbstract
+    private var settings: Settings = (context as GameActivity).settings
     private val sharedPreferences : SharedPreferences =
         context.getSharedPreferences("best_score", Context.MODE_PRIVATE)
 
@@ -40,21 +42,37 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
 
     override fun surfaceCreated(holder: SurfaceHolder?) {
         // Set up the paddles.
-        paddleA = Paddle(Side.A, 0f, height / 2f)
-        paddleB = Paddle(Side.B, width.toFloat(), height / 2f)
+        paddleA = when (settings.difficulty) {
+            Difficulty.EASY -> SimplePaddle(Side.A, 0f, height / 2f, settings.difficulty)
+            else -> SmoothPaddle(Side.A, 0f, height / 2f, settings.difficulty)
+        }
+        paddleB  = when (settings.difficulty) {
+            Difficulty.EASY -> SimplePaddle(Side.B, width.toFloat(), height / 2f, settings.difficulty)
+            else -> SmoothPaddle(Side.B, width.toFloat(), height / 2f, settings.difficulty)
+        }
 
         // Set up the ball.
-        ball = Ball(width / 2f, height / 2f)
+        ball = Ball(width / 2f, height / 2f, settings.difficulty)
+
         ball.setUpGameView(this)
 
         // Set up the game.
-        game = Game(paddleA, paddleB, ball, sharedPreferences.getInt("best_score", 0))
+        when (settings.pvp) {
+            Mode.ONE_PLAYER -> {
+                game = OnePlayerGame(paddleA, paddleB, ball, settings.difficulty, sharedPreferences.getInt("best_score", 0))
+            }
+            Mode.TWO_PLAYERS -> {
+                game = TwoPlayersGame(paddleA, paddleB, ball, settings.difficulty)
+            }
+        }
 
         thread.running = true
         thread.start()
     }
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
+        paddleB.paddleX = width.toFloat()
+        ball.initX = width / 2f - ball.size/2
     }
 
     fun playSound(resId: Int) {
@@ -68,15 +86,23 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
     }
 
     fun update() {
-        game.checkBounce()
-        if (game.referee()) {
+        game.bounce()
+        if (game.referee(width)) {
             playSound(R.raw.score_sound2)
-            sharedPreferences.edit().putInt("best_score", game.bestScore).apply()
+            if (game is OnePlayerGame) {
+                sharedPreferences.edit().putInt("best_score", (game as OnePlayerGame).bestScore).apply()
+            }
             ball.kill()
             Timer().schedule(500) {
                 ball.resetBall()
             }
         }
+
+        if (paddleA is SmoothPaddle && paddleB is SmoothPaddle) {
+            (paddleA as SmoothPaddle).update(height)
+            (paddleB as SmoothPaddle).update(height)
+        }
+
         ball.move()
     }
 
@@ -94,9 +120,9 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
     override fun onTouchEvent(event: MotionEvent): Boolean {
         for (i in 0 until event.pointerCount) {
             if (event.getX(i) < width / 2) {
-                paddleA.movePaddle(event.getY(i))
+                paddleA.movePaddle(event, i, height)
             } else {
-                paddleB.movePaddle(event.getY(i))
+                paddleB.movePaddle(event, i, height)
             }
         }
         return true
@@ -111,9 +137,15 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
             textPaint.textAlign = Paint.Align.CENTER
             val xPos = canvas.width / 2f
             val yPos = (canvas.height / 2f - (textPaint.descent() + textPaint.ascent()) / 2f)
-            it.drawText("${game.points}", xPos, yPos, textPaint)
-            textPaint.textSize = 100f
-            it.drawText("${game.bestScore}", xPos, 100f, textPaint)
+
+            if (game is OnePlayerGame) {
+                it.drawText("${(game as OnePlayerGame).points}", xPos, yPos, textPaint)
+                textPaint.textSize = 100f
+                it.drawText("${(game as OnePlayerGame).bestScore}", xPos, 100f, textPaint)
+            } else {
+                it.drawText("${(game as TwoPlayersGame).pointsA} : ${(game as TwoPlayersGame).pointsB}",
+                    xPos, yPos, textPaint)
+            }
         }
     }
 }

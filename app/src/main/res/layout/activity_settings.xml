@@ -4,7 +4,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.MainActivity">
+        tools:context=".activity.SettingsActivity">
 
     <LinearLayout
             android:layout_width="wrap_content"
@@ -16,25 +16,22 @@
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
             android:id="@+id/linearLayout">
 
-        <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="P"
-                    android:textSize="100sp"
-                    android:textColor="@color/colorAccent"/>
-            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                       app:srcCompat="@mipmap/pong"
-                        android:layout_marginTop="60dp"/>
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="ng"
-                    android:textSize="100sp"
-                    android:textColor="@color/colorAccent"/>
+        <Spinner android:id="@+id/pvpSpinner"
+                 android:layout_width="wrap_content"
+                 android:layout_height="match_parent"
+                 android:textSize="20sp"
+                 android:textColor="@color/colorAccent"
+                 android:background="@drawable/custom_button"
+                android:gravity="center"/>
 
-        </LinearLayout>
+        <Spinner android:id="@+id/difficultySpinner"
+                 android:layout_width="wrap_content"
+                 android:layout_height="match_parent"
+                 android:textColor="@color/colorAccent"
+                 android:padding="5dp"
+                 android:background="@drawable/custom_button"
+                 android:textSize="20sp"
+        />
 
         <Button
                 android:text="@string/play"
@@ -42,10 +39,10 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorAccent"
                 android:id="@+id/playButton"
-                android:onClick="settingsActivity"
+                android:onClick="play"
                 android:background="@drawable/custom_button"
                 android:textSize="20sp"
-                />
+        />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
