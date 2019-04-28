@@ -1,4 +1,8 @@
-# Pong
+<p align="ceNTER">
+  <img src="https://i.imgur.com/DUBQTrw.png" width="100"/>
+</p>
+
+# 
 Mobile Pong game
 
 ## Features
