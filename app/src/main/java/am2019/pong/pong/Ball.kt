@@ -30,7 +30,7 @@ class Ball(var initX : Float, private var initY : Float, difficulty: Difficulty)
         dx = when (difficulty) {
             Difficulty.EASY -> 15f
             Difficulty.MEDIUM -> 20f
-            Difficulty.HARD -> 30f
+            Difficulty.HARD -> 20f
         }
         dy = dx
         defdx = dx
@@ -49,8 +49,8 @@ class Ball(var initX : Float, private var initY : Float, difficulty: Difficulty)
     fun resetBall() {
         ballX = initX
         ballY = initY
-        dx = (defdx + 5*Random.nextFloat()) * randomNegativity()
-        dy = (defdy + 5*Random.nextFloat()) * randomNegativity()
+        dx = (defdx + defdx*Random.nextFloat()) * randomNegativity()
+        dy = (defdy + defdy*Random.nextFloat()) * randomNegativity()
         flipDirection(SpeedComponent.X)
     }
 

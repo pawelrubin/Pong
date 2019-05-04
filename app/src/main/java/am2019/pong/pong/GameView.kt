@@ -5,9 +5,12 @@ import am2019.pong.activity.GameActivity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.AssetManager
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.media.MediaPlayer
 import android.text.TextPaint
 import android.util.AttributeSet
@@ -109,10 +112,11 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
     override fun draw(canvas: Canvas?) {
         super.draw(canvas)
         canvas?.also {
+            it.drawColor(resources.getColor(R.color.colorPrimaryDark))
             paddleA.draw(it)
             paddleB.draw(it)
-            ball.draw(it)
             updateScore(it)
+            ball.draw(it)
         }
     }
 
@@ -131,17 +135,18 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
     private fun updateScore(canvas: Canvas?) {
         canvas?.also { it ->
             val textPaint = TextPaint()
-            textPaint.color = Color.WHITE
+            textPaint.color = Color.GRAY
             textPaint.textSize = 500f
-            textPaint.alpha = 50
             textPaint.textAlign = Paint.Align.CENTER
+            textPaint.typeface = resources.getFont(R.font.bungee)
             val xPos = canvas.width / 2f
             val yPos = (canvas.height / 2f - (textPaint.descent() + textPaint.ascent()) / 2f)
 
             if (game is OnePlayerGame) {
                 it.drawText("${(game as OnePlayerGame).points}", xPos, yPos, textPaint)
                 textPaint.textSize = 100f
-                it.drawText("${(game as OnePlayerGame).bestScore}", xPos, 100f, textPaint)
+                textPaint.typeface = resources.getFont(R.font.faster_one)
+                it.drawText("BEST: ${(game as OnePlayerGame).bestScore}", xPos, 100f, textPaint)
             } else {
                 it.drawText("${(game as TwoPlayersGame).pointsA} : ${(game as TwoPlayersGame).pointsB}",
                     xPos, yPos, textPaint)
