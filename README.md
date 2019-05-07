@@ -1,4 +1,4 @@
-<p align="ceNTER">
+<p align="center">
   <img src="https://i.imgur.com/DUBQTrw.png" width="100"/>
 </p>
 
@@ -10,7 +10,7 @@ Mobile Pong game
   - One player mode
   - Two players mode
 - Three difficulty levels
-  - Eeasy
+  - Easy
   - Medium
   - Hard
 

@@ -3,14 +3,15 @@ package am2019.pong.pong
 import android.view.MotionEvent
 
 class SmoothPaddle(side: Side, x: Float, y: Float, difficulty: Difficulty) : PaddleAbstract(side, x, y, difficulty) {
-    private var movementState : MovementState = MovementState.MOVING_NOT
+    private var movementState: MovementState = MovementState.MOVING_NOT
     private val speed = 30f
 
     override fun movePaddle(event: MotionEvent, index: Int, height: Int) {
         movementState = when {
-            event.getY(index) > height/2f -> {
+            event.getY(index) > height / 2f -> {
                 MovementState.MOVING_UP
-            } else -> {
+            }
+            else -> {
                 MovementState.MOVING_DOWN
             }
         }
@@ -32,7 +33,8 @@ class SmoothPaddle(side: Side, x: Float, y: Float, difficulty: Difficulty) : Pad
                 if (paddleY <= height - this.height)
                     paddleY += speed
             }
-            MovementState.MOVING_NOT -> {}
+            MovementState.MOVING_NOT -> {
+            }
         }
     }
 

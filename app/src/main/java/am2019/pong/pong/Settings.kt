@@ -2,9 +2,9 @@ package am2019.pong.pong
 
 import java.io.Serializable
 
-data class Settings (
-    var pvp : Mode = Mode.ONE_PLAYER,
-    var difficulty : Difficulty = Difficulty.EASY
+data class Settings(
+    var pvp: Mode = Mode.ONE_PLAYER,
+    var difficulty: Difficulty = Difficulty.EASY
 ) : Serializable
 
 enum class Mode {

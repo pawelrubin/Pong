@@ -1,12 +1,12 @@
 package am2019.pong.pong
 
-class OnePlayerGame (
+class OnePlayerGame(
     paddleA: PaddleAbstract,
     paddleB: PaddleAbstract,
     private val ball: Ball,
     difficulty: Difficulty,
     var bestScore: Int
-) : GameAbstract(paddleA, paddleB, ball, difficulty){
+) : GameAbstract(paddleA, paddleB, ball, difficulty) {
 
     var points = 0
 
@@ -19,7 +19,7 @@ class OnePlayerGame (
     override fun referee(width: Int): Boolean {
         return when {
             ball.ballX < 0f ||
-            ball.ballX + ball.size > width -> {
+                    ball.ballX + ball.size > width -> {
                 if (points > bestScore) {
                     bestScore = points
                 }

@@ -28,4 +28,6 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("settings", settings)
         startActivity(intent)
     }
+
+    // TODO: Settings (turn off sounds etc.)
 }

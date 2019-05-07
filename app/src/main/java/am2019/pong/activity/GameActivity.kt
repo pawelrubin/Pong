@@ -20,4 +20,7 @@ class GameActivity : AppCompatActivity() {
         this.onDestroy()
         this.onCreate(null)
     }
+
+    // TODO: Saving game state on activity lifecycle.
+    // TODO: Pause the game.
 }

@@ -2,17 +2,19 @@ package am2019.pong.pong
 
 import android.view.SurfaceHolder
 
-class GameThread(private val surfaceHolder: SurfaceHolder,
-                 private val gameView: GameView) : Thread() {
+class GameThread(
+    private val surfaceHolder: SurfaceHolder,
+    private val gameView: GameView
+) : Thread() {
 
     private val targetFPS = 60
     var running: Boolean = false
 
     override fun run() {
-        var startTime : Long
+        var startTime: Long
         val targetTime = (1000 / targetFPS).toLong()
 
-        while(running) {
+        while (running) {
             startTime = System.nanoTime()
 
             surfaceHolder.lockCanvas()?.also {
@@ -25,7 +27,8 @@ class GameThread(private val surfaceHolder: SurfaceHolder,
 
             try {
                 sleep(targetTime - (System.nanoTime() - startTime) / 1000000)
-            } catch (ignored: Exception) {}
+            } catch (ignored: Exception) {
+            }
         }
     }
 }

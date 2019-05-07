@@ -25,12 +25,12 @@
                     android:textSize="57sp"
                     android:textColor="@color/colorAccent" android:fontFamily="@font/bangers"
                     android:includeFontPadding="false"
-            />
+                    tools:ignore="HardcodedText"/>
             <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
                        app:srcCompat="@mipmap/pong"
-                        android:layout_marginStart="-5dp"
-                        android:layout_marginEnd="-2dp"
-                android:layout_gravity="center"/>
+                       android:layout_marginStart="-5dp"
+                       android:layout_marginEnd="-2dp"
+                       android:layout_gravity="center" android:contentDescription="@string/logo"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -38,7 +38,9 @@
                     android:textSize="57sp"
                     android:textColor="@color/colorAccent" android:fontFamily="@font/bangers"
                     android:includeFontPadding="false"
-            />
+                    tools:ignore="HardcodedText"/>
+
+<!--TODO: Extract the logo to an image.-->
 
         </LinearLayout>
 

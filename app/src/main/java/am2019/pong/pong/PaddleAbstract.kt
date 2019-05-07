@@ -5,16 +5,16 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.view.MotionEvent
 
-abstract class PaddleAbstract (private val side : Side, x: Float, y: Float, difficulty: Difficulty) {
+abstract class PaddleAbstract(private val side: Side, x: Float, y: Float, difficulty: Difficulty) {
     var paddleX = x
         internal set
     var paddleY = y
 
-    var height : Float = 500f
-    val width : Float = 50f
+    var height: Float = 500f
+    val width: Float = 50f
 
     init {
-        paddleY -= height/2f
+        paddleY -= height / 2f
         height = when (difficulty) {
             Difficulty.EASY, Difficulty.MEDIUM -> 500f
             Difficulty.HARD -> 300f
@@ -25,8 +25,9 @@ abstract class PaddleAbstract (private val side : Side, x: Float, y: Float, diff
         paddleY = newPos
     }
 
+    // TODO: Nicer design of the paddles.
     fun draw(canvas: Canvas) {
-        val rect : RectF = when (side) {
+        val rect: RectF = when (side) {
             Side.A -> {
                 RectF(paddleX, paddleY, paddleX + width, paddleY + height)
             }
@@ -42,7 +43,7 @@ abstract class PaddleAbstract (private val side : Side, x: Float, y: Float, diff
         )
     }
 
-    abstract fun movePaddle(event: MotionEvent, index : Int, height : Int)
+    abstract fun movePaddle(event: MotionEvent, index: Int, height: Int)
 
 }
 

@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Pong</string>
     <string name="play">Play</string>
+    <string name="logo">logo</string>
     <string-array name="modeTypes">
         <item>One player</item>
         <item>Two players</item>

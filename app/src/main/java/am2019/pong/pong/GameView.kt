@@ -5,12 +5,9 @@ import am2019.pong.activity.GameActivity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.AssetManager
-import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Typeface
 import android.media.MediaPlayer
 import android.text.TextPaint
 import android.util.AttributeSet
@@ -30,7 +27,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
     private lateinit var ball: Ball
     private lateinit var game: GameAbstract
     private var settings: Settings = (context as GameActivity).settings
-    private val sharedPreferences : SharedPreferences =
+    private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(settings.difficulty.toString(), Context.MODE_PRIVATE)
 
     init {
@@ -49,7 +46,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
             Difficulty.EASY -> SimplePaddle(Side.A, 0f, height / 2f, settings.difficulty)
             else -> SmoothPaddle(Side.A, 0f, height / 2f, settings.difficulty)
         }
-        paddleB  = when (settings.difficulty) {
+        paddleB = when (settings.difficulty) {
             Difficulty.EASY -> SimplePaddle(Side.B, width.toFloat(), height / 2f, settings.difficulty)
             else -> SmoothPaddle(Side.B, width.toFloat(), height / 2f, settings.difficulty)
         }
@@ -62,7 +59,13 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
         // Set up the game.
         when (settings.pvp) {
             Mode.ONE_PLAYER -> {
-                game = OnePlayerGame(paddleA, paddleB, ball, settings.difficulty, sharedPreferences.getInt("best_score", 0))
+                game = OnePlayerGame(
+                    paddleA,
+                    paddleB,
+                    ball,
+                    settings.difficulty,
+                    sharedPreferences.getInt("best_score", 0)
+                )
             }
             Mode.TWO_PLAYERS -> {
                 game = TwoPlayersGame(paddleA, paddleB, ball, settings.difficulty)
@@ -75,7 +78,7 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
 
     override fun surfaceChanged(holder: SurfaceHolder?, format: Int, width: Int, height: Int) {
         paddleB.paddleX = width.toFloat()
-        ball.initX = width / 2f - ball.size/2
+        ball.initX = width / 2f - ball.size / 2
     }
 
     fun playSound(resId: Int) {
@@ -148,8 +151,11 @@ class GameView(context: Context, attrs: AttributeSet) : SurfaceView(context, att
                 textPaint.typeface = resources.getFont(R.font.faster_one)
                 it.drawText("BEST: ${(game as OnePlayerGame).bestScore}", xPos, 100f, textPaint)
             } else {
-                it.drawText("${(game as TwoPlayersGame).pointsA} : ${(game as TwoPlayersGame).pointsB}",
-                    xPos, yPos, textPaint)
+                // TODO: Points oriented for each player.
+                it.drawText(
+                    "${(game as TwoPlayersGame).pointsA} : ${(game as TwoPlayersGame).pointsB}",
+                    xPos, yPos, textPaint
+                )
             }
         }
     }

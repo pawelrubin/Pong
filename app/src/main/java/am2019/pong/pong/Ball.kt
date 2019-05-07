@@ -7,7 +7,7 @@ import android.graphics.RectF
 import android.support.v4.content.ContextCompat
 import kotlin.random.Random
 
-class Ball(var initX : Float, private var initY : Float, difficulty: Difficulty) {
+class Ball(var initX: Float, private var initY: Float, difficulty: Difficulty) {
     var ballX = initX
         private set
     var ballY = initY
@@ -21,11 +21,11 @@ class Ball(var initX : Float, private var initY : Float, difficulty: Difficulty)
         private set
     private var dy = 15f
 
-    private lateinit var gameView : GameView
+    private lateinit var gameView: GameView
 
     init {
-        initX -= size/2
-        initY -= size/2
+        initX -= size / 2
+        initY -= size / 2
 
         dx = when (difficulty) {
             Difficulty.EASY -> 15f
@@ -43,14 +43,14 @@ class Ball(var initX : Float, private var initY : Float, difficulty: Difficulty)
         val paint = Paint()
         paint.color = ContextCompat.getColor(gameView.context, R.color.colorAccent)
 
-        canvas.drawOval(RectF(ballX, ballY,ballX + size,ballY + size), paint)
+        canvas.drawOval(RectF(ballX, ballY, ballX + size, ballY + size), paint)
     }
 
     fun resetBall() {
         ballX = initX
         ballY = initY
-        dx = (defdx + defdx*Random.nextFloat()) * randomNegativity()
-        dy = (defdy + defdy*Random.nextFloat()) * randomNegativity()
+        dx = (defdx + defdx * Random.nextFloat()) * randomNegativity()
+        dy = (defdy + defdy * Random.nextFloat()) * randomNegativity()
         flipDirection(SpeedComponent.X)
     }
 
@@ -99,7 +99,7 @@ class Ball(var initX : Float, private var initY : Float, difficulty: Difficulty)
         ballY = initY
     }
 
-    private fun randomNegativity() : Int {
+    private fun randomNegativity(): Int {
         return Math.pow((-1).toDouble(), Random.nextInt(2).toDouble()).toInt()
     }
 

@@ -21,16 +21,14 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
 
-        ArrayAdapter.createFromResource(this, R.array.modeTypes, R.layout.custom_spinner).also {
-                adapter ->
+        ArrayAdapter.createFromResource(this, R.array.modeTypes, R.layout.custom_spinner).also { adapter ->
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(R.layout.custom_row)
             // Apply the adapter to the spinner
             pvpSpinner.adapter = adapter
         }
 
-        ArrayAdapter.createFromResource(this, R.array.difficulty_types, R.layout.custom_spinner).also {
-                adapter ->
+        ArrayAdapter.createFromResource(this, R.array.difficulty_types, R.layout.custom_spinner).also { adapter ->
             // Specify the layout to use when the list of choices appears
             adapter.setDropDownViewResource(R.layout.custom_row)
             // Apply the adapter to the spinner
@@ -52,10 +50,12 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-            settings.pvp = Mode.valueOf(parent.getItemAtPosition(position).toString().toUpperCase().replace(
-                ' ',
-                '_'
-            ))
+            settings.pvp = Mode.valueOf(
+                parent.getItemAtPosition(position).toString().toUpperCase().replace(
+                    ' ',
+                    '_'
+                )
+            )
         }
     }
 
